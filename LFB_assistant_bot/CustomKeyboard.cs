@@ -13,7 +13,7 @@ public static class CustomKeyboard
     public static  ReplyKeyboardMarkup SubjectPicker = new(new[]
         {
             new KeyboardButton[] { OperatableText.Mathcad, OperatableText.Programming },
-            new KeyboardButton[] { OperatableText.OtherSubject},
+            new KeyboardButton[] { OperatableText.OtherSubject, OperatableText.GoHome},
         }
     );
 }

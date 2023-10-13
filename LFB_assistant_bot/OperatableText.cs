@@ -2,8 +2,8 @@
 
 public static class OperatableText
 {
-    
-    
+
+    public static string Output = "";
     public const string AddOrder = "Створити замовлення";
     public const string FindMore = "Дізнатися більше";
     public const string ConnectBarman = "Зв'язатися з Барменом";

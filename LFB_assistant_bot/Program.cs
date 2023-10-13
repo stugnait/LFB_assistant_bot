@@ -21,7 +21,12 @@ class Program
     private static async Task FirstUpdate(ITelegramBotClient botClient, Update update, CancellationToken arg3)
     {
         var message = update.Message;
-        if (message != null) await botClient.SendTextMessageAsync(message.Chat.Id, OperatableText.GreetingsText,replyMarkup:CustomKeyboard.MenuPicker);
+        if (message != null)
+            if (message.Text == "/start")
+            {
+                await botClient.SendTextMessageAsync(message.Chat.Id, OperatableText.GreetingsText,replyMarkup:CustomKeyboard.MenuPicker);
+            }
+        
         botClient.StartReceiving(MenuPick,Error);
     }
 
@@ -29,11 +34,46 @@ class Program
     {
         var message = update.Message;
 
-        if (message != null) await botClient.SendTextMessageAsync(message.Chat.Id, message.Text,replyMarkup:CustomKeyboard.MenuPicker);
         switch (message.Text)
         {
-            case :
+            case OperatableText.AddOrder:
+                await botClient.SendTextMessageAsync(message.Chat.Id, "З чого саме лабораторна вам потрібна?",
+                    replyMarkup: CustomKeyboard.SubjectPicker);
+                    botClient.StartReceiving(ChooseOrder,Error);
+                break;
+            case OperatableText.FindMore:
+                await botClient.SendTextMessageAsync(message.Chat.Id, "FindMore",
+                    replyMarkup: CustomKeyboard.MenuPicker);
+                break;
+            case OperatableText.ConnectBarman:
+                await botClient.SendTextMessageAsync(message.Chat.Id, "В розробці",
+                    replyMarkup: CustomKeyboard.MenuPicker);
+                break;
+            default:
+                break;
         }
+    }
+
+    private static async Task ChooseOrder(ITelegramBotClient botClient, Update update, CancellationToken arg3)
+    {
+        var message = update.Message;
+        if (message?.Text != null)
+        {
+            await botClient.SendTextMessageAsync(message.Chat.Id, $"ChooseORder",
+                replyMarkup: CustomKeyboard.MenuPicker);
+            botClient.StartReceiving(AddOrder,Error);
+            
+        }
+    }
+
+
+    private static async Task AddOrder(ITelegramBotClient botClient, Update update, CancellationToken arg3)
+    {
+        var message = update.Message;
+
+        OperatableText.Output = $"{message.Text} {message.Chat.Username ?? message.Chat.FirstName + " " + message.Chat.LastName}, AddOrder ";
+        botClient.SendTextMessageAsync(message.Chat.Id, OperatableText.Output);
+        botClient.StartReceiving(MenuPick,Error);
     }
 
 
